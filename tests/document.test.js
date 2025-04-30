@@ -1,5 +1,5 @@
 import { expect, test, describe } from "bun:test"
-import { renderInlineElement, TextFragment, Paragraph, createDocument, addParagraph, addTextFragment, renderParagraph }from "../src/document.js"
+import { renderInlineElement, TextFragment, Paragraph, createDocument, addParagraph, addTextFragment, renderParagraph, BoldText, addBoldText, renderDocument }from "../src/document.js"
 import { List } from "immutable"
 
 describe("Create document", () => {
@@ -29,11 +29,36 @@ describe("Render paragraphs", () => {
       expect(renderInlineElement(textFragment)).toBe("Test")
    })
 
-   test("Render paragraph", () => {
+   test("Render bold fragment", () => {
+      let boldText = new BoldText("Bold")
+
+      expect(renderInlineElement(boldText)).toBe("<b>Bold</b>")
+   })
+
+   test("Render paragraph with regular text", () => {
       let paragraph = new Paragraph()
       paragraph = addTextFragment(paragraph, "Test")
 
       expect(renderParagraph(paragraph)).toBe("<p>Test</p>")
    })
+
+   test("Render paragraph with regular and bold text", () => {
+      let paragraph = new Paragraph()
+      paragraph = addTextFragment(paragraph, "Test")
+      paragraph = addBoldText(paragraph, "Bold")
+
+      expect(renderParagraph(paragraph)).toBe("<p>Test<b>Bold</b></p>")
+   })
 })
+
+describe("Render documents", () => {
+   test("Render document with one paragraph", () => {
+      let document = createDocument()
+      document = addParagraph(document)
+      document.set(0, addTextFragment(document.get(0), "Text"))
+
+      expect(renderDocument(document)).toBe("<p>Text</p>")
+   })
+})
+
 

@@ -15,6 +15,16 @@ export class TextFragment implements InlineElement {
    }
 }
 
+export class BoldText implements InlineElement {
+   tag: string
+   text: Text
+
+   constructor(text: string) {
+      this.tag = "b"
+      this.text = List(text.split(""))
+   }
+}
+
 interface BlockElement {
    tag: string;
    inlineElements: List<InlineElement>
@@ -22,7 +32,7 @@ interface BlockElement {
 
 export class Paragraph implements BlockElement {
    tag: string
-   inlineElements: List<InlineElement>;
+   inlineElements: List<InlineElement>
 
    constructor() {
       this.tag = "p"
@@ -45,6 +55,11 @@ export function addTextFragment(paragraph: Paragraph, text: string): Paragraph {
    return paragraph
 }
 
+export function addBoldText(paragraph: Paragraph, text: string): Paragraph {
+   paragraph.inlineElements = paragraph.inlineElements.push(new BoldText(text))
+   return paragraph
+}
+
 export function renderInlineElement(element: InlineElement): string {
    let tagStart = ""
    let tagEnd = ""
@@ -61,4 +76,8 @@ export function renderInlineElement(element: InlineElement): string {
 
 export function renderParagraph(paragraph: Paragraph): string {
    return "<p>" + paragraph.inlineElements.map(renderInlineElement).join("") + "</p>"
+}
+
+export function renderDocument(document: Document): string {
+   return document.map(renderParagraph).join("")
 }
