@@ -60,6 +60,11 @@ export function addBoldText(paragraph: Paragraph, text: string): Paragraph {
    return paragraph
 }
 
+export function addText(document: Document, text: string, position: number): Document {
+   
+   return document
+}
+
 export function renderInlineElement(element: InlineElement): string {
    let tagStart = ""
    let tagEnd = ""
